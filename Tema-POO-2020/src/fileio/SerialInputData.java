@@ -20,39 +20,51 @@ public final class SerialInputData extends ShowInput {
      */
     private final ArrayList<Season> seasons;
 
-    public int getShowDuration(){
-        int duration=0;
-        for(int i=0;i<seasons.size();i++){
+    /**
+     *
+     * @return the duration of a show
+     */
+    public int getShowDuration() {
+        int duration = 0;
+        for (int i = 0; i < seasons.size(); i++) {
             duration += seasons.get(i).getDuration();
         }
         return duration;
     }
 
-    public double getShowRating(List<UserInputData> users){
-        double showRating=0;
-        for(int i=1;i<=numberOfSeasons;i++){
-            double seasonRating=0;
-            double no_of_users=0;
+    /**
+     *
+     * @param users all of the users
+     * @return returns the rating of a show
+     */
+    public double getShowRating(final List<UserInputData> users) {
+        double showRating = 0;
+        for (int i = 1; i <= numberOfSeasons; i++) {
+            double seasonRating = 0;
+            double noofusers = 0;
 
-            for(int j=0;j<users.size();j++){
-                for(int k=0;k<users.get(j).getShowRatings().size();k++){
-                    if(users.get(j).getShowRatings().get(k).getTitle().equals(this.getTitle())){
-                        seasonRating=seasonRating+users.get(j).getShowRatings().get(k).getSeriesRating(i);
-                        if(users.get(j).getShowRatings().get(k).getSeriesRating(i) != 0)
-                        no_of_users++;
+            for (int j = 0; j < users.size(); j++) {
+                for (int k = 0; k < users.get(j).getShowRatings().size(); k++) {
+                    if (users.get(j).getShowRatings().get(k).
+                            getTitle().equals(this.getTitle())) {
+               seasonRating = seasonRating
+                       + users.get(j).getShowRatings().get(k).getSeriesRating(i);
+                   if (users.get(j).getShowRatings().get(k).getSeriesRating(i) != 0) {
+                       noofusers++;
+                   }
 
                     }
                 }
 
             }
-            if(no_of_users != 0) {
-                showRating = showRating + seasonRating / no_of_users;
+            if (noofusers != 0) {
+                showRating = showRating + seasonRating / noofusers;
             }
 
 
 
         }
-        showRating=showRating/(double)numberOfSeasons;
+        showRating = showRating / (double) numberOfSeasons;
         return showRating;
                 }
 

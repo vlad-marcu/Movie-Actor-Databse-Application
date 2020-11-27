@@ -1,5 +1,6 @@
 package fileio;
 
+import entertainment.Genre;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
@@ -30,13 +31,13 @@ public final class UserInputData {
      */
     private final ArrayList<String> favoriteMovies;
 
-    private ArrayList<TvShow> showRatings=new ArrayList<TvShow>();
+    private ArrayList<TvShow> showRatings = new ArrayList<TvShow>();
 
     public ArrayList<TvShow> getShowRatings() {
         return showRatings;
     }
 
-    public void setShowRatings(ArrayList<TvShow> showRatings) {
+    public void setShowRatings(final ArrayList<TvShow> showRatings) {
         this.showRatings = showRatings;
     }
 
@@ -44,11 +45,11 @@ public final class UserInputData {
         return movieRatings;
     }
 
-    public void setMovieRatings(HashMap<String, Double> movieRatings) {
+    public void setMovieRatings(final HashMap<String, Double> movieRatings) {
         this.movieRatings = movieRatings;
     }
 
-    private HashMap<String,Double> movieRatings=new HashMap<String, Double>();
+    private HashMap<String, Double> movieRatings = new HashMap<String, Double>();
 
 
     public UserInputData(final String username, final String subscriptionType,
@@ -76,29 +77,77 @@ public final class UserInputData {
         return favoriteMovies;
     }
 
-    public int getNoRatings(){
-        int no_of_ratings=0;
-        no_of_ratings += movieRatings.size();
-        for(int i=0;i<showRatings.size();i++)
-        {
-            no_of_ratings += showRatings.get(i).getSeasons().size();
+    /**
+     *
+     * @return return how many ratings an user has given
+     */
+    public int getNoRatings() {
+        int noofratings = 0;
+        noofratings += movieRatings.size();
+        for (int i = 0; i < showRatings.size(); i++) {
+            noofratings += showRatings.get(i).getSeasons().size();
         }
-        return no_of_ratings;
+        return noofratings;
     }
 
-    public JSONObject getFavorite(ActionInputData action, Writer writer) throws IOException {
-
-        for(Map.Entry mapElement : history.entrySet()){
-            if(mapElement.getKey().equals(action.getTitle())){
-                if(favoriteMovies.contains(action.getTitle())==true) {
-                    return writer.writeFile(action.getActionId(), null, "error ->" +
-                            ' ' + action.getTitle() + ' ' +
-                            "is already in favourite list");
+    /**
+     *
+     * @param string genre
+     * @param movies all of the movies
+     * @param serials all of the serials
+     * @param users all of the users
+     * @return returns a list of unviewed videos from a genre
+     */
+    public ArrayList<ShowSearch> getSearch(final String string, final List<MovieInputData> movies,
+                                           final List<SerialInputData> serials,
+                                           final List<UserInputData> users) {
+        ArrayList<ShowSearch> shows = new ArrayList<ShowSearch>();
+        for (int i = 0; i < movies.size(); i++) {
+            if (!this.getHistory().containsKey(movies.get(i).getTitle())) {
+                if (movies.get(i).getGenres().contains(string)) {
+                        ShowSearch show = new ShowSearch(movies.get(i).getTitle(),
+                                movies.get(i).getMovieRating(users));
+                        shows.add(show);
                 }
-            else {
+            }
+        }
+        for (int j = 0; j < movies.size(); j++) {
+            if (!this.getHistory().containsKey(serials.get(j).getTitle())) {
+                if (serials.get(j).getGenres().contains(string)) {
+                    ShowSearch show = new ShowSearch(serials.get(j).getTitle(),
+                            serials.get(j).getShowRating(users));
+                    shows.add(show);
+                }
+            }
+        }
+        return shows;
+
+    }
+
+    /**
+     *
+     * @param action current command
+     * @param writer the writer we use to write the JSON object
+     * @return adds video to faovurite list if possible then writes JSON object
+     * @throws IOException
+     */
+    public JSONObject getFavorite(final ActionInputData action,
+                                  final Writer writer) throws IOException {
+
+        for (Map.Entry mapElement : history.entrySet()) {
+            if (mapElement.getKey().equals(action.getTitle())) {
+                if (favoriteMovies.contains(action.getTitle())) {
+                    return writer.writeFile(action.getActionId(), null, "error ->"
+                            + ' '
+                            + action.getTitle()
+                            + ' '
+                            + "is already in favourite list");
+                } else {
                     favoriteMovies.add(action.getTitle());
-                    return writer.writeFile(action.getActionId(), null, "success ->" +
-                            ' ' + action.getTitle() + ' '
+                    return writer.writeFile(action.getActionId(), null, "success ->"
+                            + ' '
+                            + action.getTitle()
+                            + ' '
                             + "was added as favourite");
                 }
             }
@@ -106,75 +155,214 @@ public final class UserInputData {
 
 
         }
- return writer.writeFile(action.getActionId(),null,"error ->"+
-                ' '+action.getTitle()+' '
-                +"is not seen");
+ return writer.writeFile(action.getActionId(), null, "error ->"
+                + ' '
+                + action.getTitle()
+                + ' '
+                + "is not seen");
 
     }
 
-    public JSONObject getView(ActionInputData action,Writer writer) throws IOException{
-        for(Map.Entry mapElement : history.entrySet()){
-            if(mapElement.getKey().equals(action.getTitle())){
-
-                mapElement.setValue((int)mapElement.getValue()+1);
-                return writer.writeFile(action.getActionId(),null,"success ->"+' '+action.getTitle()+' '+"was viewed with total views of"+' '+mapElement.getValue());
-            }
-        }
-        history.put(action.getTitle(),1);
-        return writer.writeFile(action.getActionId(),null,"success ->"+' '+action.getTitle()+' '+"was viewed with total views of"+' '+1);
-    }
-    public JSONObject getRating(ActionInputData action,List<SerialInputData> shows,Writer writer) throws IOException{
-        for(Map.Entry mapElement : history.entrySet()){
-            if(mapElement.getKey().equals(action.getTitle())) {
-                if (action.getSeasonNumber() == 0) {
-                    if(movieRatings.containsKey(action.getTitle()))
-                        return writer.writeFile(action.getActionId(), null, "error ->"+' '+ action.getTitle()+' '+"has been already rated"
-                                );
-                    movieRatings.put(action.getTitle(), action.getGrade());
-                    return writer.writeFile(action.getActionId(), null, "success ->" + ' ' + action.getTitle() + ' ' + "was rated with" + ' ' +
-                            movieRatings.get(action.getTitle()) + ' ' + "by" + ' ' +
-                            action.getUsername());
-
-                } else {
-
-                                for(int i=0;i<showRatings.size();i++){
-                                    if(showRatings.get(i).getTitle().equals(action.getTitle())){
-                                        if(showRatings.get(i).alreadyRated(action.getSeasonNumber()))
-                                            return writer.writeFile(action.getActionId(), null, "error ->"+' '+ action.getTitle()+' '+"has been already rated"
-                                            );
-                                    }
-                                }
-                                Series series = new Series(action.getGrade(), action.getSeasonNumber());
-                                TvShow show = new TvShow();
-                                show.setTitle(action.getTitle());
-                                show.getSeasons().add(series);
-                                showRatings.add(show);
-                                return writer.writeFile(action.getActionId(), null, "success ->" + ' ' + action.getTitle() + ' ' + "was rated with" + ' ' +
-                                        showRatings.get(showRatings.size()-1).getSeriesRating(action.getSeasonNumber()) + ' ' + "by" + ' ' +
-                                        action.getUsername());
-
-
-
-
-
+    /**
+     *
+     * @param movies all of the movies
+     * @param genre the genre
+     * @param shows all the shows
+     * @param action the current action
+     * @param writer the writer that writes the JSON object
+     * @return checks if videos are viewed then if they contain the genre then writes JSON object
+     * @throws IOException
+     */
+    public JSONObject getPopular(final List<MovieInputData> movies,
+                                 final Genre genre, final List<SerialInputData> shows,
+                                 final ActionInputData action,
+                                 final Writer writer)throws IOException {
+        for (MovieInputData movie : movies) {
+            if (!history.containsKey(movie.getTitle())) {
+                if (movie.getGenres().contains(genre.toString())) {
+                    return writer.writeFile(action.getActionId(),
+                            null, "PopularRecommendation result:"
+                               + ' '
+                               + movie.getTitle());
                 }
             }
         }
-        return writer.writeFile(action.getActionId(),null,"error ->"+
-                ' '+action.getTitle()+' '
-                +"is not seen");
+        for (SerialInputData show : shows) {
+            if (!history.containsKey(show.getTitle())) {
+                if (show.getGenres().contains(genre.toString())) {
+                    return writer.writeFile(action.getActionId(),
+                            null, "PopularRecommendation result:"
+                                    + show.getTitle());
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @param movies all of the movies
+     * @param shows all of the shows
+     * @param action the current command
+     * @param writer the writer that writes the JSON object
+     * @return checks if video is viewed then writes JSON object
+     * @throws IOException
+     */
+    public JSONObject getStandard(final List<MovieInputData> movies,
+                                  final List<SerialInputData> shows,
+                                  final ActionInputData action,
+                                  final Writer writer)throws IOException {
+        for (int i = 0; i < movies.size(); i++) {
+            if (!history.containsKey(movies.get(i).getTitle())) {
+                return writer.writeFile(action.getActionId(), null, "StandardRecommendation result:"
+                        + ' '
+                        + movies.get(i).getTitle());
+            }
+        }
+        for (int i = 0; i < shows.size(); i++) {
+            if (!history.containsKey(shows.get(i).getTitle())) {
+                return writer.writeFile(action.getActionId(),
+                        null, "StandardRecommendation result:"
+                                + shows.get(i).getTitle());
+            }
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @param action the current command
+     * @param writer the writer that writes the JSON object
+     * @return updates the number of views of an user for a given video
+     * @throws IOException
+     */
+    public JSONObject getView(final ActionInputData action,
+                              final Writer writer) throws IOException {
+        for (Map.Entry mapElement : history.entrySet()) {
+            if (mapElement.getKey().equals(action.getTitle())) {
+
+                mapElement.setValue((int) mapElement.getValue() + 1);
+                return writer.writeFile(action.getActionId(), null,
+                        "success ->"
+                                + ""
+                                + ' '
+                                + action.getTitle()
+                                + ' '
+                                + "was viewed with total views of"
+                                + ' '
+                                + mapElement.getValue());
+            }
+        }
+        history.put(action.getTitle(), 1);
+        return writer.writeFile(action.getActionId(), null,
+                "success ->"
+                        + ""
+                        + ' '
+                        + action.getTitle()
+                        + ' '
+                        + "was viewed with total views of"
+                        + ' '
+                        + 1);
+    }
+
+    /**
+     *
+     * @param action the current command
+     * @param shows all of the shows
+     * @param writer the writer that writes the JSON object
+     * @return  updates the rating of a video then writes JSON object
+     * @throws IOException
+     */
+    public JSONObject getRating(final ActionInputData action,
+                                final List<SerialInputData> shows,
+                                final Writer writer) throws IOException {
+        for (Map.Entry mapElement : history.entrySet()) {
+            if (mapElement.getKey().equals(action.getTitle())) {
+                if (action.getSeasonNumber() == 0) {
+                    if (movieRatings.containsKey(action.getTitle())) {
+                        return writer.writeFile(action.getActionId(),
+                                null, "error ->"
+                                        + ' '
+                                        + action.getTitle()
+                                        + ' '
+                                        + "has been already rated"
+                        );
+                    }
+                    movieRatings.put(action.getTitle(), action.getGrade());
+                    return writer.writeFile(action.getActionId(),
+                            null, "success ->"
+                                    + ' '
+                                    + action.getTitle()
+                                    + ' '
+                                    + "was rated with"
+                                    + ' '
+                                    + movieRatings.get(action.getTitle())
+                                    + ' '
+                                    + "by"
+                                    + ' '
+                                    + action.getUsername());
+
+                } else {
+                    for (int i = 0; i < showRatings.size(); i++) {
+                        if (showRatings.get(i).getTitle().equals(action.getTitle())) {
+                            if (showRatings.get(i).alreadyRated(action.getSeasonNumber())) {
+                                return writer.writeFile(action.getActionId(),
+                                        null, "error ->"
+                                                + ' '
+                                                + action.getTitle()
+                                                + ' '
+                                                + "has been already rated"
+                                );
+                            }
+                        }
+                    }
+                    Series series = new Series(action.getGrade(), action.getSeasonNumber());
+                    TvShow show = new TvShow();
+                    show.setTitle(action.getTitle());
+                    show.getSeasons().add(series);
+                    showRatings.add(show);
+                    return writer.writeFile(action.getActionId(),
+                            null, "success ->"
+                                    + ' '
+                                    + action.getTitle()
+                                    + ' '
+                                    + "was rated with"
+                                    + ' '
+                                    + showRatings.get(showRatings.size() - 1)
+                                    .getSeriesRating(action.getSeasonNumber())
+                                    + ' '
+                                    + "by"
+                                    + ' ' + action.getUsername());
+                }
+            }
+        }
+        return writer.writeFile(action.getActionId(), null, "error ->"
+                + ' '
+                + action.getTitle()
+                + ' '
+                + "is not seen");
 
 
     }
-
 
 
     @Override
     public String toString() {
-        return "UserInputData{" + "username='"
-                + username + '\'' + ", subscriptionType='"
-                + subscriptionType + '\'' + ", history="
-                + history + ", favoriteMovies="
-                + favoriteMovies + '}';
+        return "UserInputData{"
+                + "username='"
+                + username
+                + '\''
+                + ", subscriptionType='"
+                + subscriptionType
+                + '\''
+                + ", history="
+                + history
+                + ", favoriteMovies="
+                + favoriteMovies
+                + ", showRatings="
+                + showRatings
+                + ", movieRatings="
+                + movieRatings
+                + '}';
     }
 }

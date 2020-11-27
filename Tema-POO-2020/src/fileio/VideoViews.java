@@ -1,29 +1,29 @@
 package fileio;
 
-public class VideoViews {
-    private String video_name;
+public final class VideoViews {
+    private String videoname;
     private int views;
-    public char getFirstLetter(){
-        return video_name.charAt(0);
+    public char getFirstLetter() {
+        return videoname.charAt(0);
     }
-    public VideoViews(String video_name,int views){
-        this.video_name=video_name;
-        this.views=views;
-    }
-
-    public String getVideo_name() {
-        return video_name;
+    public VideoViews(final String videoname, final int views) {
+        this.videoname = videoname;
+        this.views = views;
     }
 
-    public void setVideo_name(String video_name) {
-        this.video_name = video_name;
+    public String getVideoname() {
+        return videoname;
+    }
+
+    public void setVideoname(final String videoname) {
+        this.videoname = videoname;
     }
 
     public int getViews() {
         return views;
     }
 
-    public void setViews(int views) {
+    public void setViews(final int views) {
         this.views = views;
     }
 }

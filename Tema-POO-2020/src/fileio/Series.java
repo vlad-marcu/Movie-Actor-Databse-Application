@@ -1,29 +1,31 @@
 package fileio;
 
-public class Series {
+public final class Series {
     private double rating;
+
+    private int noseason;
 
     public double getRating() {
         return rating;
     }
 
-    public void setRating(double rating) {
+    public void setRating(final double rating) {
         this.rating = rating;
     }
 
-    public int getNo_season() {
-        return no_season;
+    public int getNoseason() {
+        return noseason;
     }
 
-    public void setNo_season(int no_season) {
-        this.no_season = no_season;
+    public void setNoseason(final int noseason) {
+        this.noseason = noseason;
     }
 
-    private int no_season;
 
-    public Series(double rating,int no_season){
-        this.rating=rating;
-        this.no_season=no_season;
+
+    public Series(final double rating, final int noseason) {
+        this.rating = rating;
+        this.noseason = noseason;
     }
 
 

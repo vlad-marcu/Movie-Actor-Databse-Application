@@ -1,39 +1,48 @@
 package fileio;
 
-public class ActorRating {
-    private String actor_name;
-    private double actor_rating;
+public final class ActorRating {
+    private String actorName;
+    private double actorRating;
 
-    public char getActorFirstLetter(){
-        return actor_name.charAt(0);
+    public char getActorFirstLetter() {
+
+        return actorName.charAt(0);
     }
 
-    public String getActor_name() {
-        return actor_name;
+    public char getActorSecondLetter() {
+        return actorName.charAt(1);
     }
 
-    public void setActor_name(String actor_name) {
-        this.actor_name = actor_name;
+
+    public String getActorName() {
+        return actorName;
+    }
+
+    public void setActorName(final String actorname) {
+        this.actorName = actorname;
     }
 
     @Override
     public String toString() {
-        return "ActorRating{" +
-                "actor_name='" + actor_name + '\'' +
-                ", actor_rating=" + actor_rating +
-                '}';
+        return "ActorRating{"
+                + "actor_name='"
+                + actorName
+                + '\''
+                + ", actor_rating="
+                + actorRating
+                + '}';
     }
 
-    public double getActor_rating() {
-        return actor_rating;
+    public double getActorRating() {
+        return actorRating;
     }
 
-    public void setActor_rating(double actor_rating) {
-        this.actor_rating = actor_rating;
+    public void setActoRating(final double actorrating) {
+        this.actorRating = actorrating;
     }
 
-    public ActorRating(String actor_name, double actor_rating){
-        this.actor_name=actor_name;
-        this.actor_rating=actor_rating;
+    public ActorRating(final String actorName, final double actorRating) {
+        this.actorName = actorName;
+        this.actorRating = actorRating;
     }
 }

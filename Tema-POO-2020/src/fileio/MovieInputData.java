@@ -14,21 +14,25 @@ public final class MovieInputData extends ShowInput {
      */
     private final int duration;
 
-    public double getMovieRating(List<UserInputData> users) {
-        double rating=0;
-        double no_of_users=0;
-        for(int i=0;i<users.size();i++){
-            if(users.get(i).getMovieRatings().containsKey(this.getTitle())){
-                rating+=users.get(i).getMovieRatings().get(this.getTitle());
-
-
-                no_of_users++;
+    /**
+     *
+     * @param users all of the users
+     * @return returns the rating of a movie
+     */
+    public double getMovieRating(final List<UserInputData> users) {
+        double rating = 0;
+        double noofusers = 0;
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getMovieRatings().containsKey(this.getTitle())) {
+                rating += users.get(i).getMovieRatings().get(this.getTitle());
+                noofusers++;
             }
         }
-        if(no_of_users == 0)
+        if (noofusers == 0) {
             return 0;
-        else
-    return rating/no_of_users;
+        } else {
+            return rating / noofusers;
+        }
     }
 
     public MovieInputData(final String title, final ArrayList<String> cast,
@@ -44,11 +48,19 @@ public final class MovieInputData extends ShowInput {
 
     @Override
     public String toString() {
-        return "MovieInputData{" + "title= "
-                + super.getTitle() + "year= "
-                + super.getYear() + "duration= "
-                + duration + "cast {"
-                + super.getCast() + " }\n"
-                + "genres {" + super.getGenres() + " }\n ";
+        return "MovieInputData{"
+                + "title= "
+                + super.getTitle()
+                + ' '
+                + "year= "
+                + super.getYear()
+                + "duration= "
+                + duration
+                + "cast {"
+                + super.getCast()
+                + " }\n"
+                + "genres {"
+                + super.getGenres()
+                + " }\n ";
     }
 }

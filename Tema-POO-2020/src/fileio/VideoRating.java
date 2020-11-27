@@ -1,34 +1,45 @@
 package fileio;
 
-public class VideoRating {
+public final class VideoRating {
 
-    private String video_name;
-    private double video_rating;
+    private String videoname;
+    private double videorating;
 
-    public VideoRating(String video_name, double video_rating) {
-        this.video_name = video_name;
-        this.video_rating = video_rating;
+    public VideoRating(final String videoname, final double videorating) {
+        this.videoname = videoname;
+        this.videorating = videorating;
     }
 
 
-    public String getVideo_name() {
-        return video_name;
+    public String getVideoname() {
+        return videoname;
     }
 
-    public void setVideo_name(String video_name) {
-        this.video_name = video_name;
+    @Override
+    public String toString() {
+        return "VideoRating{"
+                + "video_name='"
+                + videoname
+                + '\''
+                + ", video_rating="
+                + videorating
+                + '}';
     }
 
-    public double getVideo_rating() {
-        return video_rating;
+    public void setVideoname(final String videoname) {
+        this.videoname = videoname;
     }
 
-    public void setVideo_rating(double video_rating) {
-        this.video_rating = video_rating;
+    public double getVideorating() {
+        return videorating;
     }
 
-    public char getFirstLetter(){
-        return video_name.charAt(0);
+    public void setVideorating(final double videorating) {
+        this.videorating = videorating;
+    }
+
+    public char getFirstLetter() {
+        return videoname.charAt(0);
     }
 }
 

@@ -1,29 +1,44 @@
 package fileio;
 
-public class UserRating {
-    private String user_name;
-    private int no_of_ratings;
-    public UserRating(String user_name,int no_of_ratings){
-        this.user_name=user_name;
-        this.no_of_ratings=no_of_ratings;
+public final class UserRating {
+    private String username;
+    private int noofratings;
+    public UserRating(final String username, final int noofratings) {
+        this.username = username;
+        this.noofratings = noofratings;
     }
-    public char getFirstLetter(){
-        return user_name.charAt(0);
-    }
-
-    public String getUser_name() {
-        return user_name;
+    public char getFirstLetter() {
+        return username.charAt(0);
     }
 
-    public void setUser_name(String user_name) {
-        this.user_name = user_name;
+    public char getSecondLetter() {
+        return  username.charAt(1);
     }
 
-    public int getNo_of_ratings() {
-        return no_of_ratings;
+    public String getUsername()  {
+        return username;
     }
 
-    public void setNo_of_ratings(int no_of_ratings) {
-        this.no_of_ratings = no_of_ratings;
+    @Override
+    public String toString() {
+        return "UserRating{"
+                + "user_name='"
+                + username
+                + '\''
+                + ", no_of_ratings="
+                + noofratings
+                + '}';
+    }
+
+    public void setUsername(final String username) {
+        this.username = username;
+    }
+
+    public int getNoofratings() {
+        return noofratings;
+    }
+
+    public void setNoofratings(final int noofratings) {
+        this.noofratings = noofratings;
     }
 }

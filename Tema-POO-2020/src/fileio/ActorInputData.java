@@ -66,71 +66,101 @@ public final class ActorInputData {
         this.careerDescription = careerDescription;
     }
 
-    public double getActorRating(List<UserInputData> users,List<MovieInputData> movies,List<SerialInputData> serials){
-        double actorRating=0;
-        double productions=0;
-       for(int i=0;i<this.filmography.size();i++){
-           double showRating=0;
-           for(int j=0;j<movies.size();j++){
-               if(movies.get(j).getTitle().equals(this.filmography.get(i))){
-                   {
-                       showRating += movies.get(j).getMovieRating(users);
-                       if(movies.get(j).getMovieRating(users) != 0)
+    /**
+     *
+     * @param users all the users
+     * @param movies all the movies
+     * @param serials all the serials
+     * @return total rating of an actor
+     */
+    public double getActorRating(final List<UserInputData>  users,
+                                 final List<MovieInputData> movies,
+                                 final List<SerialInputData> serials) {
+        double actorRating = 0;
+        double productions = 0;
+       for (int i = 0; i < this.filmography.size(); i++) {
+           double showRating = 0;
+           for (int j = 0; j < movies.size(); j++) {
+               if (movies.get(j).getTitle().equals(this.filmography.get(i))) {
+
+                   showRating += movies.get(j).getMovieRating(users);
+
+                   if (movies.get(j).getMovieRating(users) != 0) {
+                       productions++;
+                   }
+
+               }
+           }
+       for (int k = 0; k < serials.size(); k++) {
+               if (serials.get(k).getTitle().equals(this.filmography.get(i))) {
+                   showRating += serials.get(k).getShowRating(users);
+
+                   if (serials.get(k).getShowRating(users) != 0) {
                        productions++;
                    }
                }
            }
-           for(int k=0;k<serials.size();k++){
-               if(serials.get(k).getTitle().equals(this.filmography.get(i))) {
-                   showRating += serials.get(k).getShowRating(users);
-                   if(serials.get(k).getShowRating(users) != 0)
-                   productions++;
-               }
-           }
-        actorRating=actorRating+showRating;
+            actorRating = actorRating + showRating;
        }
-       if(productions != 0)
-      return actorRating/productions;
-       else
-           return 0;
+             if (productions != 0) {
+                 return actorRating / productions;
+
+             } else {
+                 return 0;
+             }
     }
-    public char getFirstLetter(){
+    public char getFirstLetter() {
         return name.charAt(0);
     }
 
-    public char getSecondLetter(){
+    public char getSecondLetter() {
         return name.charAt(1);
     }
-    public int getAwardsNumber(ActionInputData action){
-        int no_of_awards=0;
-        for(int i=0;i<action.getFilters().get(3).size();i++){
-            if(action.getFilters().get(3).get(i) != null){
-                ActorsAwards award=ActorsAwards.valueOf(action.getFilters().get(3).get(i));
-                if(awards.containsKey(award)==false)
+
+    /**
+     *
+     * @param action the command that is given
+     * @return number of awards of an actor respecting the parameters
+     */
+    public int getAwardsNumber(final ActionInputData action) {
+        int noofawards = 0;
+        int index = 3;
+        for (int i = 0; i < action.getFilters().get(index).size(); i++) {
+            if (action.getFilters().get(index).get(i) != null) {
+                ActorsAwards award = ActorsAwards.valueOf(action.getFilters().get(index).get(i));
+                if (!awards.containsKey(award)) {
                     return 0;
+                }
             }
         }
-        for(Map.Entry mapElement : awards.entrySet()){
-           no_of_awards=no_of_awards+(int)mapElement.getValue();
+        for (Map.Entry mapElement : awards.entrySet()) {
+           noofawards = noofawards + (int) mapElement.getValue();
         }
-        return no_of_awards;
+        return noofawards;
     }
 
-    public boolean checkActorKeyWords(ActionInputData action){
-        for(int i=0;i<action.getFilters().get(2).size();i++){
-            StringBuilder stringBuilder=new StringBuilder();
+    /**
+     *
+     * @param action the command that is given
+     * @return true if the actor contains the given keywords, false otherwise
+     */
+    public boolean checkActorKeyWords(final ActionInputData action) {
+        for (int i = 0; i < action.getFilters().get(2).size(); i++) {
+            StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(action.getFilters().get(2).get(i));
             stringBuilder.append(" ");
-            StringBuilder stringBuilder2=new StringBuilder();
+            StringBuilder stringBuilder2 = new StringBuilder();
             stringBuilder2.append(action.getFilters().get(2).get(i));
             stringBuilder2.append(",");
-            StringBuilder stringBuilder3=new StringBuilder();
+            StringBuilder stringBuilder3 = new StringBuilder();
             stringBuilder3.append(action.getFilters().get(2).get(i));
             stringBuilder3.append(".");
-            if(!careerDescription.toLowerCase().contains(stringBuilder.toString())){
-                if(!careerDescription.toLowerCase().contains(stringBuilder2.toString()))
-                    if(!careerDescription.toLowerCase().contains(stringBuilder3.toString()))
-                return false;
+            if (!careerDescription.toLowerCase().contains(stringBuilder.toString())) {
+                if (!careerDescription.toLowerCase().contains(stringBuilder2.toString())) {
+                    if (!careerDescription.toLowerCase().contains(stringBuilder3.toString())) {
+                        return false;
+                    }
+                }
             }
         }
         return true;
@@ -138,9 +168,11 @@ public final class ActorInputData {
 
     @Override
     public String toString() {
-        return "ActorInputData{" +
-                "name='" + name + '\'' +
-                ", descriptions=" + careerDescription +
-                '}';
+        return "ActorInputData{"
+                + "name='" + name
+                + '\''
+                + ", descriptions="
+                + careerDescription
+                + '}';
     }
 }

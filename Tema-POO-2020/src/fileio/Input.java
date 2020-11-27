@@ -31,13 +31,18 @@ public final class Input {
 
     @Override
     public String toString() {
-        return "Input{" +
-                "actorsData=" + actorsData +
-                ", usersData=" + usersData +
-                ", commandsData=" + commandsData +
-                ", moviesData=" + moviesData +
-                ", serialsData=" + serialsData +
-                '}';
+        return "Input{"
+                + "actorsData="
+                + actorsData
+                + ", usersData="
+                + usersData
+                + ", commandsData="
+                + commandsData
+                + ", moviesData="
+                + moviesData
+                + ", serialsData="
+                + serialsData
+                + '}';
     }
 
     public Input() {

@@ -1,30 +1,30 @@
 package fileio;
 
-public class VideoFavorite {
-    private String video_name;
-    private int no_of_favourites;
-    public VideoFavorite(String video_name,int no_of_favourites){
-        this.video_name=video_name;
-        this.no_of_favourites=no_of_favourites;
+public final class VideoFavorite {
+    private String videoname;
+    private int nooffavourites;
+    public VideoFavorite(final String videoname, final int nooffavourites) {
+        this.videoname = videoname;
+        this.nooffavourites = nooffavourites;
     }
 
-    public char getFirstLetter(){
-        return video_name.charAt(0);
+    public char getFirstLetter() {
+        return videoname.charAt(0);
     }
 
-    public String getVideo_name() {
-        return video_name;
+    public String getVideoname() {
+        return videoname;
     }
 
-    public void setVideo_name(String video_name) {
-        this.video_name = video_name;
+    public void setVideoname(final String videoname) {
+        this.videoname = videoname;
     }
 
-    public int getNo_of_favourites() {
-        return no_of_favourites;
+    public int getNooffavourites() {
+        return nooffavourites;
     }
 
-    public void setNo_of_favourites(int no_of_favourites) {
-        this.no_of_favourites = no_of_favourites;
+    public void setNooffavourites(final int nooffavourites) {
+        this.nooffavourites = nooffavourites;
     }
 }

@@ -1,31 +1,31 @@
 package fileio;
 
-public class VideoLongest {
-    private String video_name;
+public final class VideoLongest {
+    private String videoname;
     private int duration;
 
-    public VideoLongest(String video_name,int duration){
-        this.video_name=video_name;
-        this.duration=duration;
+    public VideoLongest(final String videoname, final int duration) {
+        this.videoname = videoname;
+        this.duration = duration;
     }
 
-    public String getVideo_name() {
-        return video_name;
+    public String getVideoname() {
+        return videoname;
     }
 
-    public void setVideo_name(String video_name) {
-        this.video_name = video_name;
+    public void setVideoname(final String videoname) {
+        this.videoname = videoname;
     }
 
     public int getDuration() {
         return duration;
     }
 
-    public void setDuration(int duration) {
+    public void setDuration(final int duration) {
         this.duration = duration;
     }
 
-    public char getFirstLetter(){
-        return video_name.charAt(0);
+    public char getFirstLetter() {
+        return videoname.charAt(0);
     }
 }
