@@ -627,7 +627,7 @@ public final class Main {
                             ArrayList<VideoFavorite> videos = new ArrayList<VideoFavorite>();
                             for (int j = 0; j < input.getSerials().size(); j++) {
                                 if (input.getSerials().get(j).checkFilters(input.getCommands().
-                                        get(i)) == true) {
+                                        get(i))) {
                                     if (input.getSerials().get(j).getFavourites(input
                                             .getUsers()) != 0) {
                                         VideoFavorite video = new VideoFavorite(input.getSerials().
@@ -1308,7 +1308,6 @@ public final class Main {
                                         genre_idx++;
                                         if (genre_idx == genres.size()) {
                                             if (idx == 1) {
-                                                System.out.println("Da");
                               arrayResult.add(fileWriter.writeFile(input.getCommands().get(i).
                                               getActionId(), null,
                                      "PopularRecommendation cannot be applied!"));

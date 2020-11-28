@@ -31,6 +31,8 @@ public final class UserInputData {
      */
     private final ArrayList<String> favoriteMovies;
 
+    private HashMap<String, Double> movieRatings = new HashMap<String, Double>();
+
     private ArrayList<TvShow> showRatings = new ArrayList<TvShow>();
 
     public ArrayList<TvShow> getShowRatings() {
@@ -48,9 +50,6 @@ public final class UserInputData {
     public void setMovieRatings(final HashMap<String, Double> movieRatings) {
         this.movieRatings = movieRatings;
     }
-
-    private HashMap<String, Double> movieRatings = new HashMap<String, Double>();
-
 
     public UserInputData(final String username, final String subscriptionType,
                          final Map<String, Integer> history,
@@ -173,31 +172,7 @@ public final class UserInputData {
      * @return checks if videos are viewed then if they contain the genre then writes JSON object
      * @throws IOException
      */
-    public JSONObject getPopular(final List<MovieInputData> movies,
-                                 final Genre genre, final List<SerialInputData> shows,
-                                 final ActionInputData action,
-                                 final Writer writer)throws IOException {
-        for (MovieInputData movie : movies) {
-            if (!history.containsKey(movie.getTitle())) {
-                if (movie.getGenres().contains(genre.toString())) {
-                    return writer.writeFile(action.getActionId(),
-                            null, "PopularRecommendation result:"
-                               + ' '
-                               + movie.getTitle());
-                }
-            }
-        }
-        for (SerialInputData show : shows) {
-            if (!history.containsKey(show.getTitle())) {
-                if (show.getGenres().contains(genre.toString())) {
-                    return writer.writeFile(action.getActionId(),
-                            null, "PopularRecommendation result:"
-                                    + show.getTitle());
-                }
-            }
-        }
-        return null;
-    }
+
 
     /**
      *
