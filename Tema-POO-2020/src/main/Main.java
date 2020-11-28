@@ -76,7 +76,6 @@ public final class Main {
         JSONArray arrayResult = new JSONArray();
 
         //TODO add here the entry point to your implementation
-        System.out.println(input.getUsers().toString());
         for (int i = 0; i < input.getCommands().size(); i++) {
 
             if (input.getCommands().get(i).getActionType().equals("command")) {
